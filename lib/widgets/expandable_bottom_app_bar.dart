@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../colors_all.dart';
+
 class ExpandableBottomAppBar extends StatefulWidget {
   const ExpandableBottomAppBar({super.key});
 
@@ -18,35 +20,53 @@ class _ExpandableBottomAppBarState extends State<ExpandableBottomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.blue,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (_isExpanded) ...[
-              ElevatedButton(
-                onPressed: () {
-                  // Left button action
-                },
-                child: const Text('Left Button'),
-              ),
-            ],
-            ElevatedButton(
-              onPressed: _toggleExpand,
-              child: _isExpanded ? const Text('Collapse') : const Text('Expand'),
+    // Remove the BottomAppBar completely and use Container instead
+    return Container(
+      height: 80, // Adjust this height as needed
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          if (_isExpanded)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FloatingActionButton(
+                  mini: true,
+                  backgroundColor: AppColors.primaryOrange,
+                  onPressed: () {
+                    // Left button action
+                  },
+                  child: const Icon(
+                    Icons.remove,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 60),
+                FloatingActionButton(
+                  mini: true,
+                  backgroundColor: AppColors.primaryOrange,
+                  onPressed: () {
+                    // Right button action
+                  },
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
-            if (_isExpanded) ...[
-              ElevatedButton(
-                onPressed: () {
-                  // Right button action
-                },
-                child: const Text('Right Button'),
+          Transform.translate(
+            offset: const Offset(0, -20),
+            child: FloatingActionButton(
+              backgroundColor: AppColors.primaryOrange,
+              onPressed: _toggleExpand,
+              child: Icon(
+                _isExpanded ? Icons.navigation : Icons.navigation_outlined,
+                color: Colors.white,
               ),
-            ],
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           ),
           if (_showInfoCard && selectedVehicleLocation != null)
             Positioned(
-              bottom: 16,
+              bottom: 80, // Adjusted for bottom bar
               left: 0,
               right: 0,
               child: VehicleInfoCard(
@@ -258,6 +258,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ),
         ],
       ),
+      extendBody: true, // Added to make body extend behind bottom bar
       bottomNavigationBar: const ExpandableBottomAppBar(),
     );
   }
