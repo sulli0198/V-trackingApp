@@ -8,7 +8,7 @@ import 'package:vtracking_app/widgets/vehicle_info_card.dart';
 import 'package:vtracking_app/widgets/expandable_bottom_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -22,10 +22,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   bool _showInfoCard = false;
   final MapController _mapController = MapController();
   final Map<String, LatLng> vehicleLocations = {
-    'Vehicle 1 of Group A': LatLng(21.4858, 39.1925),
-    'Vehicle 2 of Group A': LatLng(21.4958, 39.2025),
-    'Vehicle 1 of Group B': LatLng(21.5058, 39.2125),
-    'Vehicle 2 of Group B': LatLng(21.5158, 39.2225),
+    'Vehicle 1 of Group A': const LatLng(21.4858, 39.1925),
+    'Vehicle 2 of Group A': const LatLng(21.4958, 39.2025),
+    'Vehicle 1 of Group B': const LatLng(21.5058, 39.2125),
+    'Vehicle 2 of Group B': const LatLng(21.5158, 39.2225),
   };
 
   @override
@@ -240,26 +240,38 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ],
           ),
           if (_showInfoCard && selectedVehicleLocation != null)
-            Positioned(
-              bottom: 80, // Adjusted for bottom bar
-              left: 0,
-              right: 0,
-              child: VehicleInfoCard(
-                vehicleName: vehicleLocations.entries
-                    .firstWhere((entry) => entry.value == selectedVehicleLocation)
-                    .key,
-                onClose: () {
-                  setState(() {
-                    _showInfoCard = false;
-                  });
-                },
-                onHideVehicle: hideVehicle,
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 60.0), // Adjust the top padding as needed
+                child: VehicleInfoCard(
+                  vehicleName: vehicleLocations.entries
+                      .firstWhere((entry) => entry.value == selectedVehicleLocation)
+                      .key,
+                  onClose: () {
+                    setState(() {
+                      _showInfoCard = false;
+                    });
+                  },
+                  onHideVehicle: hideVehicle,
+                ),
               ),
             ),
         ],
       ),
       extendBody: true, // Added to make body extend behind bottom bar
-      bottomNavigationBar: const ExpandableBottomAppBar(),
+      bottomNavigationBar: ExpandableBottomAppBar(
+        onLeftButtonPressed: () {
+          // Zoom out
+          double currentZoom = _mapController.camera.zoom;
+          _mapController.move(_mapController.camera.center, currentZoom - 1);
+        },
+        onRightButtonPressed: () {
+          // Zoom in
+          double currentZoom = _mapController.camera.zoom;
+          _mapController.move(_mapController.camera.center, currentZoom + 1);
+        },
+      ),
     );
   }
 }

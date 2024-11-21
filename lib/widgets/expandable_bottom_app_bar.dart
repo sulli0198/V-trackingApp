@@ -1,16 +1,41 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../colors_all.dart';
 
 class ExpandableBottomAppBar extends StatefulWidget {
-  const ExpandableBottomAppBar({super.key});
+  final VoidCallback? onLeftButtonPressed;
+  final VoidCallback? onRightButtonPressed;
+
+  const ExpandableBottomAppBar({
+    super.key,
+    this.onLeftButtonPressed,
+    this.onRightButtonPressed
+  });
 
   @override
   State<ExpandableBottomAppBar> createState() => _ExpandableBottomAppBarState();
 }
 
-class _ExpandableBottomAppBarState extends State<ExpandableBottomAppBar> {
+class _ExpandableBottomAppBarState extends State<ExpandableBottomAppBar> with SingleTickerProviderStateMixin {
   bool _isExpanded = false;
+  bool _isMiddleButtonSmall = false;
+  late AnimationController _animationController;
+  late Animation<double> _sizeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+    _sizeAnimation = Tween<double>(begin: 1.0, end: 0.7).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
 
   void _toggleExpand() {
     setState(() {
@@ -18,11 +43,27 @@ class _ExpandableBottomAppBarState extends State<ExpandableBottomAppBar> {
     });
   }
 
+  void _toggleMiddleButtonSize() {
+    setState(() {
+      _isMiddleButtonSmall = !_isMiddleButtonSmall;
+      if (_isMiddleButtonSmall) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Remove the BottomAppBar completely and use Container instead
     return Container(
-      height: 80, // Adjust this height as needed
+      height: 120,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -30,39 +71,51 @@ class _ExpandableBottomAppBarState extends State<ExpandableBottomAppBar> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Left Button - Zoom Out
                 FloatingActionButton(
-                  mini: true,
-                  backgroundColor: AppColors.primaryOrange,
+                  backgroundColor: AppColors.primaryBlue,
                   onPressed: () {
-                    // Left button action
+                    if (widget.onLeftButtonPressed != null) {
+                      widget.onLeftButtonPressed!();
+                    }
                   },
                   child: const Icon(
                     Icons.remove,
                     color: Colors.white,
+                    size: 32,
                   ),
                 ),
-                const SizedBox(width: 60),
+                const SizedBox(width: 100),
+                // Right Button - Zoom In
                 FloatingActionButton(
-                  mini: true,
-                  backgroundColor: AppColors.primaryOrange,
+                  backgroundColor: AppColors.primaryBlue,
                   onPressed: () {
-                    // Right button action
+                    if (widget.onRightButtonPressed != null) {
+                      widget.onRightButtonPressed!();
+                    }
                   },
                   child: const Icon(
                     Icons.add,
                     color: Colors.white,
+                    size: 32,
                   ),
                 ),
               ],
             ),
           Transform.translate(
             offset: const Offset(0, -20),
-            child: FloatingActionButton(
-              backgroundColor: AppColors.primaryOrange,
-              onPressed: _toggleExpand,
-              child: Icon(
-                _isExpanded ? Icons.navigation : Icons.navigation_outlined,
-                color: Colors.white,
+            child: ScaleTransition(
+              scale: _sizeAnimation,
+              child: FloatingActionButton(
+                backgroundColor: AppColors.primaryBlue,
+                onPressed: () {
+                  _toggleExpand();
+                  _toggleMiddleButtonSize();
+                },
+                child: Icon(
+                  _isExpanded ? Icons.navigation : Icons.navigation_outlined,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

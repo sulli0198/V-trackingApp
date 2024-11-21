@@ -15,69 +15,75 @@ class VehicleInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Card(
-          margin: const EdgeInsets.symmetric(horizontal: 18, vertical: 550),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(color: Colors.grey, width: 1),
-          ),
-          child: SizedBox(
-            height: 80,
-            width: 330,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    vehicleName,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 120.0), // Adjust the card's position
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // The Card
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(color: Colors.grey, width: 1),
+              ),
+              child: SizedBox(
+                width: 330,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        vehicleName,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'July 5, 2024 12:00 PM', // Replace with actual date and time
+                        style: TextStyle(fontSize: 11),
+                      ),
+                    ],
                   ),
-                  const Text(
-                    'July 5, 2024 12:00 PM', // Replace with actual date and time
-                    style: TextStyle(fontSize: 11),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-        Positioned(
-          left: 0,
-          right: 0,
-           bottom: 538,
-           // This will position the button to overlap the card
-          child: Center(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-              child: Material(
-                color: AppColors.primaryBlue,
-                child: InkWell(
-                  onTap:() { onClose();
-                             onHideVehicle(); // Call this when the close icon is tapped
-                            },
-                  child: const SizedBox(
-                    width: 25,
-                    height: 25,
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 15,
+            // Close Button Positioned at the Bottom
+            Positioned(
+              bottom: -15, // Adjusted to make the button overlap slightly outside the card
+              left: 0,
+              right: 0,
+              child: Center(
+                child: ClipOval(
+                  child: Material(
+                    color: AppColors.primaryBlue,
+                    child: InkWell(
+                      onTap: () {
+                        onClose();
+                        onHideVehicle();
+                      },
+                      child: const SizedBox(
+                        width: 30, // Circular size
+                        height: 30, // Circular size
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
