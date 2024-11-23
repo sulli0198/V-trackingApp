@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^2.0.7
   flutter_map: ^7.0.1
   latlong2: ^0.9.1
   url_launcher: ^6.3.0
@@ -65,6 +66,7 @@ flutter:
   assets:
       - assets/images/logo_main.png
       - assets/images/map_.png
+      - assets/images/icons8-car-48.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

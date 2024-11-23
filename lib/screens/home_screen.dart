@@ -6,6 +6,7 @@ import 'package:vtracking_app/colors_all.dart';
 import 'package:vtracking_app/widgets/group_list_item.dart';
 import 'package:vtracking_app/widgets/vehicle_info_card.dart';
 import 'package:vtracking_app/widgets/expandable_bottom_app_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -221,10 +222,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       width: 80.0,
                       height: 80.0,
                       point: selectedVehicleLocation!,
-                      child: const Icon(
-                        Icons.directions_car,
-                        color: Colors.red,
-                        size: 40,
+                      child: SvgPicture.asset(
+                        'assets/images/icons8-car-48.svg',
+                        width: 40.0,
+                        height: 40.0,
                       ),
                     ),
                   ],
